@@ -1,0 +1,24 @@
+{
+    "name": "AudioModule",
+    "rootNamespace": "",
+    "references": [
+        "GUID:0c752da273b17c547ae705acf0f2adf2",
+        "GUID:aafc6db0c67e06f43a200716096664ba",
+        "GUID:0d8beb7f090555447a6cf5ce9e54dbb4",
+        "GUID:21b0c8d1703a94250bfac916590cea4f",
+        "GUID:ea715009a4efd4c6cbc85be3ae097dd3",
+        "GUID:58c7e653ee5b3a542b30c76b561a5f37",
+        "GUID:7e0e6974374697b4d950bb93196018c8",
+        "GUID:b8f2d24bbdf865d4e9c7d6a95287db5e",
+        "GUID:b3d9cc33868b40e4aaafe5eef1e12b3a"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

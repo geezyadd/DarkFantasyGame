@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95e66c6366d904e98bc83428217d4fd7, type: 3}
+  m_Name: Example
+  m_EditorClassIdentifier: 
+  _data:
+    _json: '{"graph":{"variables":{"Kind":"Flow","collection":{"$content":[],"$version":"A"},"$version":"A"},"controlInputDefinitions":[],"controlOutputDefinitions":[],"valueInputDefinitions":[],"valueOutputDefinitions":[],"title":null,"summary":null,"pan":{"x":528.4398,"y":11.97929},"zoom":1.0,"elements":[{"coroutine":false,"defaultValues":{},"position":{"x":-204.0,"y":-144.0},"guid":"da7343d5-4d12-40a6-a911-2a7e3997cea7","$version":"A","$type":"Unity.VisualScripting.Start"},{"coroutine":false,"defaultValues":{},"position":{"x":-204.0,"y":60.0},"guid":"326642d3-0ac5-4211-9cc1-5e343ec7c5e0","$version":"A","$type":"Unity.VisualScripting.Update"},{"defaultValues":{"ControlMode":{"$content":"None","$type":"Features.AudioModule.Scripts.Nodes.ControlType"},"ParameterName":{"$content":"","$type":"System.String"},"ParameterValue":{"$content":0.0,"$type":"System.Single"},"IsPaused":{"$content":true,"$type":"System.Boolean"}},"position":{"x":65.0,"y":-137.0},"guid":"a663bc96-b3cb-4161-8e7c-b8ce77ebbced","$version":"A","$type":"Features.AudioModule.Scripts.Nodes.AudioInstanceControlNode"},{"defaultValues":{"AudioType":{"$content":"None","$type":"Features.AudioModule.Scripts.AudioId"}},"position":{"x":403.0,"y":-141.0},"guid":"c26ed01f-ea13-423f-aaa4-5c09d16eaa3d","$version":"A","$type":"Features.AudioModule.Scripts.Nodes.GetAudioInstanceNode"},{"defaultValues":{"Position":{"x":0.0,"y":0.0,"z":0.0,"$type":"UnityEngine.Vector3"},"Transform":null},"position":{"x":384.0,"y":14.0},"guid":"e2c098e2-3451-4e3e-ab1f-36bc363df31a","$version":"A","$type":"Features.AudioModule.Scripts.Nodes.PlayAudioInstanceNode"},{"defaultValues":{"AudioType":{"$content":"None","$type":"Features.AudioModule.Scripts.AudioId"},"Position":{"x":0.0,"y":0.0,"z":0.0,"$type":"UnityEngine.Vector3"}},"position":{"x":670.0,"y":-2.0},"guid":"2696173d-a75c-42bb-b8f0-56dfebef3d1a","$version":"A","$type":"Features.AudioModule.Scripts.Nodes.PlayAudioOneShotNode"},{"defaultValues":{"StopMode":{"$content":"IMMEDIATE","$type":"FMOD.Studio.STOP_MODE"},"FadeDuration":{"$content":0.0,"$type":"System.Single"}},"position":{"x":656.0,"y":175.0},"guid":"c7b42ccd-bc26-491f-9964-960be4591d77","$version":"A","$type":"Features.AudioModule.Scripts.Nodes.StopAudioInstanceNode"}],"$version":"A"}}'
+    _objectReferences: []
