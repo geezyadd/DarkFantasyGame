@@ -1,0 +1,27 @@
+{
+    "name": "Input",
+    "rootNamespace": "",
+    "references": [
+        "Unity.InputSystem",
+        "InputModule.Core",
+        "Zenject",
+        "AssetLoaderServiceModule",
+        "SharedData",
+        "Unity.TextMeshPro",
+        "BootstrapModule",
+        "GameUpdaterModule",
+        "DeviceModule",
+        "DeviceModule.DeviceData"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "Zenject-usage.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

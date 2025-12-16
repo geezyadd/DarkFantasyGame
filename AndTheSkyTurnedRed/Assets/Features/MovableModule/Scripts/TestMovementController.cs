@@ -1,3 +1,4 @@
+using System;
 using Features.AnimationModule.Scriipts;
 using UnityEngine;
 
@@ -23,14 +24,21 @@ namespace Features.MovableModule.Scripts
         [SerializeField] private float _jumpMultiplier = 2f;
         [SerializeField] private float _gravityMultiplierDistance = 2;
         [SerializeField] private float _maxGravityMultiplierValue = 15;
-
+        [SerializeField] private float _distanceToEndJump;
         private Vector3 _inputDirection;
         private float _gravityMultiplier;
         private bool _isSimpleAttackEnded = true;
+        [SerializeField] private float _animationSmoothSpeed;
+        private float _smoothedVelocity;
+        private bool _isMoving;
 
         private void OnEnable()
         {
             _simpleCharacterAnimationFunctionReactor.OnSimpleAttackEnded += EndSimpleAttack;
+        }
+
+        private void OnDisable() {
+            _simpleCharacterAnimationFunctionReactor.OnSimpleAttackEnded -= EndSimpleAttack;
         }
 
         private void EndSimpleAttack()
@@ -57,8 +65,10 @@ namespace Features.MovableModule.Scripts
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                _isSimpleAttackEnded = true;
                 _movable.Jump();
+                _isSimpleAttackEnded = true;
+                _simpleAnimationController.ResetTrigger("Run");
+                _simpleAnimationController.SetTrigger("Jump");
             }
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
@@ -66,6 +76,33 @@ namespace Features.MovableModule.Scripts
                 _simpleAnimationController.SetTrigger("SlashAttack");
             }
             
+            ProcessGravityMultiplier(distanceToGround);
+            
+            if (distanceToGround < _distanceToEndJump && _movable.IsJumping) {
+                _simpleAnimationController.SetTrigger("JumpEnded");
+            }
+            
+            _isMoving = _movable.GetVelocity > 0f;
+            
+            if (_isMoving && !_movable.IsJumping) {
+                _simpleAnimationController.SetTrigger("Run");
+                _isMoving = true;
+            }
+            
+            
+            _smoothedVelocity = Mathf.Lerp(_smoothedVelocity, _movable.GetVelocity, Time.deltaTime * _animationSmoothSpeed);
+            if (_smoothedVelocity < 0.01f && !_movable.IsJumping && !_isMoving) {
+                _simpleAnimationController.SetTrigger("Idle");
+            }
+            
+            _simpleAnimationController.SetFloat("AngleToTarget", _movable.AngleToTarget);
+            _simpleAnimationController.SetFloat("Velocity", _smoothedVelocity);
+            _simpleAnimationController.SetFloat("RunAnimationSpeed", _movable.GetVelocity/_movable.GetSpeed);
+            _simpleAnimationController.SetBool("IsSimpleAttackEnded", _isSimpleAttackEnded);
+
+        }
+
+        private void ProcessGravityMultiplier(float distanceToGround) {
             if (distanceToGround >= _gravityMultiplierDistance)
             {
                 if(_gravityMultiplier >= _maxGravityMultiplierValue)
@@ -78,14 +115,6 @@ namespace Features.MovableModule.Scripts
                 _gravityMultiplier = 0;
                 _movable.SetGravityMultiplier(_gravityMultiplier);
             }
-            
-            _simpleAnimationController.SetBool("IsJumping", _movable.IsJumping);
-            _simpleAnimationController.SetFloat("DistanceToGround", distanceToGround);
-            _simpleAnimationController.SetFloat("Velocity", _movable.GetVelocity);
-            _simpleAnimationController.SetFloat("AngleToTarget", _movable.AngleToTarget);
-            _simpleAnimationController.SetFloat("RunAnimationSpeed", _movable.GetVelocity/_movable.GetSpeed);
-            _simpleAnimationController.SetBool("IsSimpleAttackEnded", _isSimpleAttackEnded);
-
         }
 
         private void FixedUpdate()
@@ -95,10 +124,11 @@ namespace Features.MovableModule.Scripts
             _movable.SetJumpDuration(_jumpDuration);
             _movable.SetJumpMultiplier(_jumpMultiplier);
             _movable.SetRotationSpeed(_rotationSpeed);
-            if(_isSimpleAttackEnded)
-                _movable.ProcessHorizontalMovement();
-            else
-                _movable.ResetHorizontalVelocity();
+            //if(_isSimpleAttackEnded)
+            //    _movable.ProcessHorizontalMovement();
+            //else
+            //    _movable.ResetHorizontalVelocity();
+            _movable.ProcessHorizontalMovement();
             _movable.ProcessVerticalMovement();
             _movable.ProcessDirectionRotation();
         }

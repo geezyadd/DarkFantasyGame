@@ -1,4 +1,5 @@
 using Features.GameFlowStateMachine.Scripts;
+using Features.Input.Scripts.Installers;
 using Features.SceneLoaderModule.Runtime.Scripts.Installers;
 using Zenject;
 
@@ -10,6 +11,7 @@ namespace Core.Contexts.ProjectContext.Scripts
         {
             SceneLoaderInstaller.Install(Container);
             GameFlowStateMachineInstaller.Install(Container);
+            InputRealizationInstaller.Install(Container);
         }
     }
 }
