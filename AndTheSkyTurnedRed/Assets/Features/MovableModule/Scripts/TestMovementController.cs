@@ -84,16 +84,13 @@ namespace Features.MovableModule.Scripts
             
             _isMoving = _movable.GetVelocity > 0f;
             
-            if (_isMoving && !_movable.IsJumping) {
+            if (_isMoving && !_movable.IsJumping && distanceToGround < _distanceToEndJump) {
                 _simpleAnimationController.SetTrigger("Run");
                 _isMoving = true;
             }
             
             
             _smoothedVelocity = Mathf.Lerp(_smoothedVelocity, _movable.GetVelocity, Time.deltaTime * _animationSmoothSpeed);
-            if (_smoothedVelocity < 0.01f && !_movable.IsJumping && !_isMoving) {
-                _simpleAnimationController.SetTrigger("Idle");
-            }
             
             _simpleAnimationController.SetFloat("AngleToTarget", _movable.AngleToTarget);
             _simpleAnimationController.SetFloat("Velocity", _smoothedVelocity);

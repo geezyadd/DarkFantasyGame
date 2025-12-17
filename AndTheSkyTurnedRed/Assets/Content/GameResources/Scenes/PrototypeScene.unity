@@ -1571,7 +1571,7 @@ MonoBehaviour:
   _jumpMultiplier: 4
   _gravityMultiplierDistance: 0.1
   _maxGravityMultiplierValue: -9
-  _distanceToEndJump: 3
+  _distanceToEndJump: 0.025
   _animationSmoothSpeed: 10
 --- !u!114 &1135297715
 MonoBehaviour:
