@@ -123,9 +123,9 @@ namespace Features.MovableModule.Scripts
                     _simpleAnimationController.SetLayerWeight("BattleTurns", 1);
                     _isTurning = true;
                     if (_movable.AngleToTarget > 0)
-                        _simpleAnimationController.SetFloat("AngleToTarget", -1);
-                    else {
                         _simpleAnimationController.SetFloat("AngleToTarget", 1);
+                    else {
+                        _simpleAnimationController.SetFloat("AngleToTarget", -1);
                     }
 
                     _simpleAnimationController.SetTrigger("Turn");
@@ -158,7 +158,6 @@ namespace Features.MovableModule.Scripts
 
         private void FixedUpdate()
         {
-            _movable.ProcessDirectionRotation();
             _movable.SetDirection(_inputDirection.normalized);
             _movable.SetSpeed(_speed);
             _movable.SetJumpDuration(_jumpDuration);
@@ -168,6 +167,8 @@ namespace Features.MovableModule.Scripts
             //    _movable.ProcessHorizontalMovement();
             //else
             //    _movable.ResetHorizontalVelocity();
+            _movable.UpdateAngle();
+            _movable.ProcessDirectionRotation();
             _movable.ProcessHorizontalMovement();
             _movable.ProcessVerticalMovement();
         }

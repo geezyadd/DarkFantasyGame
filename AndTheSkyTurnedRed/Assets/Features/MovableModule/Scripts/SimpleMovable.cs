@@ -50,15 +50,34 @@ namespace Features.MovableModule.Scripts
             if (!_isJumping)
                 _rigidbody.linearVelocity = new Vector3(forwardVelocity.x, _gravityMultiplier, forwardVelocity.z);
         }
+        
+        public void UpdateAngle()
+        {
+            //if (_direction.sqrMagnitude < 0.001f)
+            //    return;
+
+            _angleToTarget = Vector3.SignedAngle(
+                transform.forward,
+                _direction,
+                Vector3.up
+            );
+        }
 
         public void ProcessDirectionRotation()
         {
-            //f(_lastDirection != _direction)
-            //   _angleToTarget = Vector3.SignedAngle(transform.forward, _direction, Vector3.up);
-            _angleToTarget = Vector3.SignedAngle(transform.forward, _direction, Vector3.up);
-            _lastDirection = _direction;
-            if (_direction.normalized != Vector3.zero)
-                transform.forward = Vector3.Lerp(transform.forward, new Vector3(_direction.normalized.x, 0, _direction.normalized.z), Time.deltaTime * _rotationSpeed);
+            if (_direction.sqrMagnitude < 0.001f || _direction == Vector3.zero)
+                return;
+
+            Vector3 flatDirection = new Vector3(_direction.x, 0f, _direction.z);
+            Quaternion targetRotation = Quaternion.LookRotation(flatDirection);
+
+            Quaternion newRotation = Quaternion.RotateTowards(
+                _rigidbody.rotation,
+                targetRotation,
+                _rotationSpeed * Time.fixedDeltaTime
+            );
+
+            _rigidbody.MoveRotation(newRotation);
         }
 
         public void ProcessVerticalMovement()
