@@ -53,9 +53,9 @@ namespace Features.MovableModule.Scripts
 
         public void ProcessDirectionRotation()
         {
-            if(_lastDirection != _direction)
-                _angleToTarget = Vector3.Angle(transform.forward, _direction);
-
+            //f(_lastDirection != _direction)
+            //   _angleToTarget = Vector3.SignedAngle(transform.forward, _direction, Vector3.up);
+            _angleToTarget = Vector3.SignedAngle(transform.forward, _direction, Vector3.up);
             _lastDirection = _direction;
             if (_direction.normalized != Vector3.zero)
                 transform.forward = Vector3.Lerp(transform.forward, new Vector3(_direction.normalized.x, 0, _direction.normalized.z), Time.deltaTime * _rotationSpeed);

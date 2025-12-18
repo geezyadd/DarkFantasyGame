@@ -1139,7 +1139,6 @@ GameObject:
   - component: {fileID: 1065428158}
   - component: {fileID: 1065428157}
   - component: {fileID: 1065428156}
-  - component: {fileID: 1065428155}
   - component: {fileID: 1065428160}
   m_Layer: 0
   m_Name: Camera
@@ -1148,23 +1147,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1065428155
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1065428154}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 896e021bcac6f5e48b324fb1690e9e1c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _target: {fileID: 1135297711}
-  _followSpeed: 5
-  _positionOffset: {x: 0, y: 5, z: -10}
-  _rotationOffset: {x: 0, y: 0, z: 0}
-  _rotationSpeed: 5
 --- !u!114 &1065428156
 MonoBehaviour:
   m_ObjectHideFlags: 0

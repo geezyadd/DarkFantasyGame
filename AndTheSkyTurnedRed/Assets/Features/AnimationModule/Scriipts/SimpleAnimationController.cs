@@ -11,5 +11,10 @@ namespace Features.AnimationModule.Scriipts
         public void SetInt(string trigger, int value) => _animator.SetInteger(trigger, value);
         public void SetBool(string trigger, bool value) => _animator.SetBool(trigger, value);
         public void SetVector3(string trigger, Vector3 value) => _animator.SetTrigger(trigger);
+
+        public void SetLayerWeight(string layerName, float weight) {
+            int combatLayer = _animator.GetLayerIndex(layerName);
+            _animator.SetLayerWeight(combatLayer, weight); 
+        }
     }
 }
