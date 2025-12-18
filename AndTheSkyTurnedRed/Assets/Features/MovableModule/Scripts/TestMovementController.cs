@@ -104,7 +104,7 @@ namespace Features.MovableModule.Scripts
 
             if (Input.GetKeyDown(KeyCode.Mouse0)) {
                 _isSimpleAttackEnded = false;
-                _simpleAnimationController.SetTrigger("SlashAttack");
+                _simpleAnimationController.SetTrigger("SimpleSwordAttack");
             }
 
             ProcessGravityMultiplier(distanceToGround);
