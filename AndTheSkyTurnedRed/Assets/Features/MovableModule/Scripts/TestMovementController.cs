@@ -119,7 +119,7 @@ namespace Features.MovableModule.Scripts
                 _simpleAnimationController.SetTrigger("Run");
                 _isMoving = true;
                 Debug.LogError(_movable.AngleToTarget);
-                if (Mathf.Abs(_movable.AngleToTarget) > 170 && !_isTurning) {
+                if (Mathf.Abs(_movable.AngleToTarget) > 100 && !_isTurning) {
                     _simpleAnimationController.SetLayerWeight("BattleTurns", 1);
                     _isTurning = true;
                     if (_movable.AngleToTarget > 0)
