@@ -1,0 +1,19 @@
+{
+    "name": "GameSceneContext",
+    "rootNamespace": "",
+    "references": [
+        "GUID:0d8beb7f090555447a6cf5ce9e54dbb4",
+        "GUID:a7c5a4d14ae5b7c4392f16fef3295f3a",
+        "GUID:2e6cec404f293b7468adf62f395a7d92",
+        "GUID:659bb982c7417c94396437402057ed8f"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

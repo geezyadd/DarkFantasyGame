@@ -7,5 +7,6 @@ namespace Features.SceneLoaderModule.Runtime.Scripts
         GlobalScene = 2, 
         MenuScene = 3,
         PrototypeScene = 4,
+        GameScene = 5,
     }
 }

@@ -2,7 +2,13 @@
     "name": "Data",
     "rootNamespace": "",
     "references": [
-        "GUID:0d8beb7f090555447a6cf5ce9e54dbb4"
+        "GUID:0d8beb7f090555447a6cf5ce9e54dbb4",
+        "GUID:1e90876ba8590f34eb207172c941ac46",
+        "GUID:39d34f58be64439ebb788425c052ded8",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23",
+        "GUID:2e6cec404f293b7468adf62f395a7d92",
+        "GUID:89b260555bfc24b40965393bc0a3df7a",
+        "GUID:a7c5a4d14ae5b7c4392f16fef3295f3a"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

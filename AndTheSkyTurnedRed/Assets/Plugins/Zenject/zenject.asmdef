@@ -1,3 +1,4 @@
 ﻿{
-	"name": "Zenject"
+	"name": "Zenject",
+	"references":[ "GUID:1e90876ba8590f34eb207172c941ac46" ]
 }

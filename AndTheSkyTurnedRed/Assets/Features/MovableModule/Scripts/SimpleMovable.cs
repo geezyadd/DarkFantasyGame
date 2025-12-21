@@ -46,7 +46,7 @@ namespace Features.MovableModule.Scripts
 
         public void ProcessHorizontalMovement()
         {
-            Vector3 forwardVelocity = _direction.normalized * _speed;
+            Vector3 forwardVelocity = _direction * _speed;
             if (!_isJumping)
                 _rigidbody.linearVelocity = new Vector3(forwardVelocity.x, _gravityMultiplier, forwardVelocity.z);
         }
@@ -67,7 +67,7 @@ namespace Features.MovableModule.Scripts
         {
             if (_direction.sqrMagnitude < 0.001f || _direction == Vector3.zero)
                 return;
-
+            
             Vector3 flatDirection = new Vector3(_direction.x, 0f, _direction.z);
             Quaternion targetRotation = Quaternion.LookRotation(flatDirection);
 

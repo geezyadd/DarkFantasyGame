@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Features.GameFlowStateMachine.Scripts;
 using Features.SceneLoaderModule.Runtime.Scripts;
 using SceneLoaderModule;
@@ -22,7 +23,13 @@ namespace Core.Contexts.GlobalContextInstaller.Scripts
         private void Start()
         {
             _gameFlowStateMachine.EnterState(GameFlowState.SurfaceGameState);
-            _sceneSwitchService.LoadScene(nameof(Scenes.PrototypeScene), LoadSceneMode.Additive);
+            IReadOnlyList<string> scenes = new List<string>
+            {
+                nameof(Scenes.GameScene),
+                nameof(Scenes.PrototypeScene)
+                
+            };
+            _sceneSwitchService.UpdateLoadedScenes(scenes, nameof(Scenes.PrototypeScene));
         }
     }
 }

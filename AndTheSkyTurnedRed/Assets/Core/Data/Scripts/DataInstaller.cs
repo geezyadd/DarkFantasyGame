@@ -1,3 +1,4 @@
+using Features.CameraModule.Scripts;
 using Zenject;
 
 namespace Core.Data.Scripts
@@ -6,7 +7,7 @@ namespace Core.Data.Scripts
     {
         public override void InstallBindings()
         {
-            
+            Container.Bind<CameraModel>().AsSingle();
         }
     }
 }

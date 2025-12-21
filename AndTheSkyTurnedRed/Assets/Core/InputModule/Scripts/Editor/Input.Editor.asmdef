@@ -2,13 +2,10 @@
     "name": "Input.Editor",
     "rootNamespace": "",
     "references": [
-        "GUID:16561a3a90771974b9a691222c121279",
-        "GUID:c45c9a2e6cf3755439d470316cb1ce82",
-        "GUID:351e6a29d4d395046a012ab54c4bc334",
         "GUID:76ab8ffb89a5366438f038b1dda8313d",
         "GUID:75469ad4d38634e559750d17036d5f7c",
-        "GUID:c43b013581c07e84ea74a4f1f528511c",
-        "GUID:b7c4fe6cbf62bb14b9f8a36ebb2952a3"
+        "GUID:b7c4fe6cbf62bb14b9f8a36ebb2952a3",
+        "GUID:1e90876ba8590f34eb207172c941ac46"
     ],
     "includePlatforms": [
         "Editor"

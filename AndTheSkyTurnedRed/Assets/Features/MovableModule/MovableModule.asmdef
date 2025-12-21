@@ -1,4 +1,4 @@
 {
 	"name": "MovableModule",
-	"references":[ "GUID:25162a5c9d4182142a2bcaf22ebf518e" ]
+	"references":[ "GUID:25162a5c9d4182142a2bcaf22ebf518e", "GUID:2e6cec404f293b7468adf62f395a7d92", "GUID:3e814fc1ce200084cbe5b058d424e09a" ]
 }

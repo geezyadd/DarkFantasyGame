@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Features.AnimationModule.Scriipts
@@ -13,8 +14,31 @@ namespace Features.AnimationModule.Scriipts
         public void SetVector3(string trigger, Vector3 value) => _animator.SetTrigger(trigger);
 
         public void SetLayerWeight(string layerName, float weight) {
-            int combatLayer = _animator.GetLayerIndex(layerName);
-            _animator.SetLayerWeight(combatLayer, weight); 
+            int layerIndex = _animator.GetLayerIndex(layerName);
+            _animator.SetLayerWeight(layerIndex, weight); 
+        }
+
+        public float GetLayerWeight(string layerName) {
+            int layerIndex = _animator.GetLayerIndex(layerName);
+            return _animator.GetLayerWeight(layerIndex);
+        }
+
+        public AnimatorStateInfo GetCurrentAnimatorStateInfo(string layerName)
+        {
+            int layerIndex = _animator.GetLayerIndex(layerName);
+            return _animator.GetCurrentAnimatorStateInfo(layerIndex);
+        }
+
+        public AnimatorStateInfo GetNextAnimatorStateInfo(string layerName)
+        {
+            int layerIndex = _animator.GetLayerIndex(layerName);
+            return _animator.GetNextAnimatorStateInfo(layerIndex);
+        }
+
+        public bool IsInTransition(string layerName)
+        {
+            int layerIndex = _animator.GetLayerIndex(layerName);
+            return _animator.IsInTransition(layerIndex);
         }
     }
 }
