@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Features.MovableModule.Scripts
 {
-    public class SimpleMovable : MonoBehaviour {
+    public class SimpleMovable : MovableBase {
         private const float RAYCAST_OFFSET = 3f;
         private const float RAYCAST_DISTANCE = 20f;
         private const float STOP_LANDING_DISTANCE_THRESHOLD = 0.05f;
@@ -22,19 +22,19 @@ namespace Features.MovableModule.Scripts
         private float _angleToTarget;
         private Vector3 _lastDirection;
 
-        public bool IsJumping => _isJumping;
-        public float AngleToTarget => _angleToTarget;
-        public float GetVelocity => _rigidbody.linearVelocity.magnitude;
-        public float GetSpeed => _speed;
-        public void SetDirection(Vector3 direction) => _direction = direction;
-        public void SetSpeed(float speed) => _speed = speed;
-        public void SetRotationSpeed(float speed) => _rotationSpeed = speed;
-        public void SetJumpDuration(float duration) => _jumpDuration = duration;
-        public void SetJumpMultiplier(float jumpMultiplier) => _jumpMultiplier = jumpMultiplier;
+        public override bool IsJumping => _isJumping;
+        public override float AngleToTarget => _angleToTarget;
+        public override float GetVelocity => _rigidbody.linearVelocity.magnitude;
+        public override float GetSpeed => _speed;
+        public override void SetDirection(Vector3 direction) => _direction = direction;
+        public override void SetSpeed(float speed) => _speed = speed;
+        public override void SetRotationSpeed(float speed) => _rotationSpeed = speed;
+        public override void SetJumpDuration(float duration) => _jumpDuration = duration;
+        public override void SetJumpMultiplier(float jumpMultiplier) => _jumpMultiplier = jumpMultiplier;
         
-        public void ResetHorizontalVelocity() => _rigidbody.linearVelocity = new Vector3(0, _rigidbody.linearVelocity.y, 0);
+        public override void ResetHorizontalVelocity() => _rigidbody.linearVelocity = new Vector3(0, _rigidbody.linearVelocity.y, 0);
 
-        public void SetGravityMultiplier(float gravityMultiplier)
+        public override void SetGravityMultiplier(float gravityMultiplier)
         {
             if (_isJumping) {
                 _gravityMultiplier = 0;
@@ -44,14 +44,14 @@ namespace Features.MovableModule.Scripts
             _gravityMultiplier = gravityMultiplier;
         }
 
-        public void ProcessHorizontalMovement()
+        public override void ProcessHorizontalMovement()
         {
             Vector3 forwardVelocity = _direction * _speed;
             if (!_isJumping)
                 _rigidbody.linearVelocity = new Vector3(forwardVelocity.x, _gravityMultiplier, forwardVelocity.z);
         }
         
-        public void UpdateAngle()
+        public override void UpdateAngle()
         {
             //if (_direction.sqrMagnitude < 0.001f)
             //    return;
@@ -63,7 +63,7 @@ namespace Features.MovableModule.Scripts
             );
         }
 
-        public void ProcessDirectionRotation()
+        public override void ProcessDirectionRotation()
         {
             if (_direction.sqrMagnitude < 0.001f || _direction == Vector3.zero)
                 return;
@@ -80,7 +80,7 @@ namespace Features.MovableModule.Scripts
             _rigidbody.MoveRotation(newRotation);
         }
 
-        public void ProcessVerticalMovement()
+        public override void ProcessVerticalMovement()
         {
             Vector3 forwardVelocity = _direction.normalized * _speed;
             if (_isJumping)
@@ -91,7 +91,7 @@ namespace Features.MovableModule.Scripts
             }
         }
 
-        public void Jump()
+        public override void Jump()
         {
             if(_isJumping)
                 return;

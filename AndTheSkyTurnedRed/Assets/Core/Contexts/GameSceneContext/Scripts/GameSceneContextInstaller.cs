@@ -1,3 +1,4 @@
+using Features.AnimationModule.Scriipts;
 using Features.CameraModule.Scripts;
 using Features.InjectedPrefabFactory.Scripts;
 using Features.PlayerSpawnModule.Scripts;
@@ -10,6 +11,7 @@ namespace Core.Contexts.GameSceneContext.Scripts
         public override void InstallBindings()
         {
             InjectedPrefabFactoryInstaller.Install(Container);
+            AnimationModuleInstaller.Install(Container);
             CameraInstaller.Install(Container);
             PlayerSpawnInstaller.Install(Container);
         }

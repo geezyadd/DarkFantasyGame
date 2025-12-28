@@ -1,3 +1,4 @@
 {
-	"name": "AnimationModule"
+	"name": "AnimationModule",
+	"references":[ "GUID:aafc6db0c67e06f43a200716096664ba", "GUID:0d8beb7f090555447a6cf5ce9e54dbb4" ]
 }

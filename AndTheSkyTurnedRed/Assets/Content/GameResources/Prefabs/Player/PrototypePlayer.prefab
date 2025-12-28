@@ -12,8 +12,12 @@ GameObject:
   - component: {fileID: 6030421592831609203}
   - component: {fileID: 1028967896717871174}
   - component: {fileID: 6963886233166362004}
+  - component: {fileID: 6047030898416435766}
+  - component: {fileID: 4802629634945663114}
   - component: {fileID: 3706211970845247093}
   - component: {fileID: 8495082365758776026}
+  - component: {fileID: 1918630892920426488}
+  - component: {fileID: -854173862410630796}
   m_Layer: 7
   m_Name: PrototypePlayer
   m_TagString: Untagged
@@ -99,11 +103,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: faab93f70ada4578820735ea858d07e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _weapon: {fileID: 7722357893836864313}
-  _attackMovementSpeedDecreaseValue: 0.3
-  _simpleAnimationController: {fileID: 8495082365758776026}
-  _simpleCharacterAnimationFunctionReactor: {fileID: 4565208245263575011}
-  _movable: {fileID: 3706211970845247093}
   _groundLayerMask:
     serializedVersion: 2
     m_Bits: 64
@@ -114,11 +113,37 @@ MonoBehaviour:
   _gravityMultiplierDistance: 0.1
   _maxGravityMultiplierValue: -9
   _distanceToEndJump: 0.025
+  _velocitySmoothSpeed: 3
+--- !u!114 &6047030898416435766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2890644354014384225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82d0afc9498f40d495837ad5b1a12a5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _weapon: {fileID: 7722357893836864313}
+  _attackMovementSpeedDecreaseValue: 0.3
+--- !u!114 &4802629634945663114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2890644354014384225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de8b97f9753d4e7b814970b0a767a8b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _distanceToEndJump: 0.025
   _animationSmoothSpeed: 10
   _stopRunAnimationVelocityBorder: 7
-  _velocitySmoothSpeed: 3
   _startRunAnimationVelocityBorder: 0
-  _turnsMovementSpeed: 10
 --- !u!114 &3706211970845247093
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -181,6 +206,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 624995327020510276}
+--- !u!114 &1918630892920426488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2890644354014384225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd337ff19bf54f508c219beb10107fc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerAnimationController: {fileID: 8495082365758776026}
+  _simpleAttackAnimationFunctionReactor: {fileID: 4565208245263575011}
+--- !u!114 &-854173862410630796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2890644354014384225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da0034b4fb114a2dbfdcca73878c7ea5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerMovable: {fileID: 3706211970845247093}
 --- !u!1 &6303072759764360307
 GameObject:
   m_ObjectHideFlags: 0

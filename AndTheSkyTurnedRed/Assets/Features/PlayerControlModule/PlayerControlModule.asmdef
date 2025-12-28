@@ -1,11 +1,12 @@
 {
-    "name": "GameSceneContext",
+    "name": "PlayerControlModule",
     "rootNamespace": "",
     "references": [
-        "GUID:0d8beb7f090555447a6cf5ce9e54dbb4",
-        "GUID:a7c5a4d14ae5b7c4392f16fef3295f3a",
+        "GUID:3e814fc1ce200084cbe5b058d424e09a",
+        "GUID:6a06052c916245c45b7c64c325f6dac9",
         "GUID:2e6cec404f293b7468adf62f395a7d92",
-        "GUID:659bb982c7417c94396437402057ed8f",
+        "GUID:4973af0f35145314d970ebf406955eab",
+        "GUID:22c16dc64519c16429a973fce7b1e464",
         "GUID:25162a5c9d4182142a2bcaf22ebf518e"
     ],
     "includePlatforms": [],
