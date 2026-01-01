@@ -3,7 +3,7 @@
 
 using UnityEngine;
 using UnityEngine.InputSystem;
-using RSG.Muffin.InputSubmodule.InputModule.Core.Scripts;
+using Core.InputModule.Scripts;
 using Zenject;
 using System;
 using UnityEngine.EventSystems;

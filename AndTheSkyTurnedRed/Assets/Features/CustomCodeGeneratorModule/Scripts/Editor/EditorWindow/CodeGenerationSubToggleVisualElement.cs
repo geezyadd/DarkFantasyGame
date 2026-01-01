@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
-namespace RSG.Muffin.CustomCodeGeneratorModule.Scripts.Editor.EditorWindow {
+namespace Features.CustomCodeGeneratorModule.Scripts.Editor.EditorWindow {
     public class CodeGenerationSubToggleVisualElement : VisualElement, IToogleVisualElement {
         private const string TOGGLE_CLEAR_SAVES_TOGGLE = "SubToggleGenerateCode";
 

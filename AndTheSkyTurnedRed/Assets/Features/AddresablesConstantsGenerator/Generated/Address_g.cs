@@ -2,13 +2,14 @@
 #nullable enable
 
 using System.Collections.Generic;
-namespace RSG.SharedData.Generated {
+namespace Features.AddressablesConstantsGenerator.Generated {
     public partial class Address {
         public static partial class Configurations {
             public const string ADDRESSABLE_GROUP_NAME = "Configurations";
             public const string CameraConfiguration_Default = "CameraConfiguration_Default.asset";
             public const string PlayerSpawnConfiguration_Default = "PlayerSpawnConfiguration_Default";
-            public static List<string> AllAddressablesInGroup = new List<string>() {"CameraConfiguration_Default.asset","PlayerSpawnConfiguration_Default",};
+            public const string DefaultPlayerStatsValuesConfiguration_Default = "DefaultPlayerStatsValuesConfiguration_Default";
+            public static List<string> AllAddressablesInGroup = new List<string>() {"CameraConfiguration_Default.asset","PlayerSpawnConfiguration_Default","DefaultPlayerStatsValuesConfiguration_Default",};
         }
         public static partial class Scenes {
             public const string ADDRESSABLE_GROUP_NAME = "Scenes";

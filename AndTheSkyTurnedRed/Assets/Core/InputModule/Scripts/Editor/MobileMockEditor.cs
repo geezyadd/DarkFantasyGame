@@ -1,5 +1,4 @@
-﻿using Features.Input.Scripts;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine.InputSystem;
 
 namespace Core.InputModule.Scripts.Editor {

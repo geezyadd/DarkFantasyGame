@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
 
-namespace Features.Input.Scripts {
+namespace Core.InputModule.Scripts {
     public class InputModel {
         public Color CurrentGamePadLightbarColor { get; private set; }
         public InputDevice CurrentActiveDevice { get; internal set; }

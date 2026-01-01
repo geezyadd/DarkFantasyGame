@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Features.CustomCodeGeneratorModule.Scripts.Editor.Core;
 using IncrementalSourceGenerator.Utils;
-using RSG.Muffin.CustomCodeGeneratorModule.Scripts.Editor.Core;
 using UnityEditor;
 using UnityEngine.InputSystem;
-using ICodeGenerator = RSG.Muffin.CustomCodeGeneratorModule.Scripts.Editor.Core.ICodeGenerator;
+using Core_ICodeGenerator = Features.CustomCodeGeneratorModule.Scripts.Editor.Core.ICodeGenerator;
 using Tools = IncrementalSourceGenerator.Utils.Tools;
 
-namespace Features.Input.Scripts.Editor {
+namespace Core.InputModule.Scripts.Editor {
     [Generator]
-    public class InputRealizationGenerator : ICodeGenerator {
+    public class InputRealizationGenerator : Core_ICodeGenerator {
         private readonly string _namespace = GENERATED_FILES_PATH.Replace("Assets/", "").Replace("/", ".");
         private const string INPUT_ACTIONS_NAME = nameof(InputActions);
         private const string INPUT_SYSTEM = "InputService";
@@ -37,7 +37,7 @@ namespace Features.Input.Scripts.Editor {
                 actions.AddRange(actionMap.actions);
 
             text.AddUsing("UnityEngine");
-            text.AddUsing("RSG.Muffin.InputSubmodule.InputModule.Core.Scripts");
+            text.AddUsing("Core.InputModule.Scripts");
             text.AddUsing("UnityEngine.InputSystem");
 
             text.AddNamespace(_namespace);
@@ -93,7 +93,7 @@ namespace Features.Input.Scripts.Editor {
 
             text.AddUsing("UnityEngine");
             text.AddUsing("UnityEngine.InputSystem");
-            text.AddUsing("RSG.Muffin.InputSubmodule.InputModule.Core.Scripts");
+            text.AddUsing("Core.InputModule.Scripts");
             text.AddUsing("Zenject");
             text.AddUsing("System");
             text.AddUsing("UnityEngine.EventSystems");

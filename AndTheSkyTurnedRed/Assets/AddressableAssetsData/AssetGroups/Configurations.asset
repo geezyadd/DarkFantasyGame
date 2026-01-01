@@ -20,6 +20,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6dca2a1a7db14c241bff234cff4af5f2
+    m_Address: DefaultPlayerStatsValuesConfiguration_Default
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 74c662f12c452804080a918c603588bc
     m_Address: PlayerSpawnConfiguration_Default
     m_ReadOnly: 0

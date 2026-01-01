@@ -4,22 +4,21 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Features.CustomCodeGeneratorModule.Scripts.Editor.Core;
 using IncrementalSourceGenerator.Utils;
 using JetBrains.Annotations;
-using RSG.Muffin.CustomCodeGeneratorModule.Scripts.Editor.Core;
-using UnityEditor;
 using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Settings;
 using UnityEngine;
-using ICodeGenerator = RSG.Muffin.CustomCodeGeneratorModule.Scripts.Editor.Core.ICodeGenerator;
+using Core_ICodeGenerator = Features.CustomCodeGeneratorModule.Scripts.Editor.Core.ICodeGenerator;
 using Tools = IncrementalSourceGenerator.Utils.Tools;
 
-namespace RSG.Muffin.AssetLoaderModuleSubmodule.Samples.Generator.Scripts {
+namespace Features.AddresablesConstantsGenerator.Scripts {
     /// <summary>
     ///     Class for generated address from addressables.
     /// </summary>
     [Generator, PublicAPI, HelpURL("https://github.com/AnnulusGames/UnityCodeGen")]
-    public class AddressableConstantsGenerator : ICodeGenerator {
+    public class AddressableConstantsGenerator : Core_ICodeGenerator {
         private static bool SkipGroup(string groupName) => 
             string.Equals(groupName, BUILT_IN_DATA_GROUP_NAME, StringComparison.Ordinal);
 
@@ -29,7 +28,7 @@ namespace RSG.Muffin.AssetLoaderModuleSubmodule.Samples.Generator.Scripts {
         private const string PUBLIC_STRING_CONST = "public const string";
         private const string PUBLIC_STRING_LIST_STATIC = "public static List<string>";
         private const string PUBLIC_STRING_LIST_LIST_STATIC = "public static List<List<string>>";
-        private const string TARGET_NAMESPACE = "RSG.SharedData.Generated";
+        private const string TARGET_NAMESPACE = "Features.AddressablesConstantsGenerator.Generated";
 
         public void Execute(GeneratorContext context) {
             string filePath = "Assets/Features/AddresablesConstantsGenerator/Generated/";

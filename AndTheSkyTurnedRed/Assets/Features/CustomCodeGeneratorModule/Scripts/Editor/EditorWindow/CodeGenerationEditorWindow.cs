@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using RSG.Muffin.CustomCodeGeneratorModule.Scripts.Editor.Core;
+using Features.CustomCodeGeneratorModule.Scripts.Editor.Core;
 using UnityEditor;
 using UnityEngine.UIElements;
 
-namespace RSG.Muffin.CustomCodeGeneratorModule.Scripts.Editor.EditorWindow {
+namespace Features.CustomCodeGeneratorModule.Scripts.Editor.EditorWindow {
     public class CodeGenerationEditorWindow : UnityEditor.EditorWindow {
         private readonly Dictionary<Type, IToogleVisualElement> _generateCodeMap = new();
         private readonly Dictionary<string, IToogleVisualElement> _subGenerateCodeMap = new();

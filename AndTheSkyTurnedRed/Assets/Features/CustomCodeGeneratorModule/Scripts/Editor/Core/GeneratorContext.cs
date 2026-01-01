@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace RSG.Muffin.CustomCodeGeneratorModule.Scripts.Editor.Core {
+namespace Features.CustomCodeGeneratorModule.Scripts.Editor.Core {
     public sealed class GeneratorContext {
         private readonly List<CodeText> _codeList = new();
 

@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using RSG.Muffin.CustomCodeGeneratorModule.Scripts.Editor.Core;
+using Features.CustomCodeGeneratorModule.Scripts.Editor.Core;
 using UnityEditor;
 
-namespace RSG.Muffin.CustomCodeGeneratorModule.Scripts.Editor.EditorWindow {
+namespace Features.CustomCodeGeneratorModule.Scripts.Editor.EditorWindow {
     public static class CodeGeneration {
         private const string DEFAULT_FOLDER_PATH = "Assets/UnityCodeGen.Generated";
         private const char SEPARATOR = '/';
