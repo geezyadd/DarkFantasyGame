@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine.UIElements;
 
-namespace RSG.Muffin.CustomCodeGeneratorModule.Scripts.Editor.EditorWindow {
+namespace Features.CustomCodeGeneratorModule.Scripts.Editor.EditorWindow {
     internal static class CodeGenerationTools {
         internal static VisualTreeAsset GetVisualTreeAsset(string visualTreeAssetName) {
             string[] guids = AssetDatabase.FindAssets(visualTreeAssetName + " t:VisualTreeAsset");

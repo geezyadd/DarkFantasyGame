@@ -1,4 +1,4 @@
-namespace RSG.Muffin.CustomCodeGeneratorModule.Scripts.Editor.Core {
+namespace Features.CustomCodeGeneratorModule.Scripts.Editor.Core {
     public interface ICodeGenerator {
         public void Execute(GeneratorContext context);
     }

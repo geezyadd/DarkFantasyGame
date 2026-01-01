@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RSG.Muffin.InputSubmodule.InputModule.Core.Scripts {
+namespace Core.InputModule.Scripts {
     public class InputDefaultActions {
         public Action Started;
         public Action Performed;

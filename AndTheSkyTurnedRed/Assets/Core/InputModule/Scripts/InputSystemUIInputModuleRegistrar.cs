@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem.UI;
 using Zenject;
 
-namespace Features.Input.Scripts {
+namespace Core.InputModule.Scripts {
     public class InputSystemUIInputModuleRegistrar : MonoBehaviour {
         [SerializeField] private InputSystemUIInputModule _inputSystemUIInputModule;
         private InputModel _inputModel;

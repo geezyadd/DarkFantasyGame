@@ -26,7 +26,15 @@ namespace Features.MovableModule.Scripts
         public override float AngleToTarget => _angleToTarget;
         public override float GetVelocity => _rigidbody.linearVelocity.magnitude;
         public override float GetSpeed => _speed;
-        public override void SetDirection(Vector3 direction) => _direction = direction;
+
+        public override void SetDirection(Vector3 direction)
+        {
+            if(direction == Vector3.zero)
+                return;
+            
+            _direction = direction;
+        }
+
         public override void SetSpeed(float speed) => _speed = speed;
         public override void SetRotationSpeed(float speed) => _rotationSpeed = speed;
         public override void SetJumpDuration(float duration) => _jumpDuration = duration;

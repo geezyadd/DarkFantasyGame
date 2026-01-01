@@ -1,7 +1,8 @@
+using Features.AddressablesConstantsGenerator.Generated;
 using Features.CameraModule.Scripts;
 using Features.PlayerSpawnModule.Scripts;
+using Features.PlayerStatsModule.Scripts;
 using Plugins.Zenject.Addons.AddressablesConfigurationsLoader;
-using RSG.SharedData.Generated;
 using Zenject;
 public class ConfigurationInstaller : Installer<ConfigurationInstaller>
 {
@@ -9,5 +10,6 @@ public class ConfigurationInstaller : Installer<ConfigurationInstaller>
     {
         Container.BindConfigurationFromAddressables<CameraConfiguration>(Address.Configurations.CameraConfiguration_Default).AsSingle();
         Container.BindConfigurationFromAddressables<PlayerSpawnConfiguration>(Address.Configurations.PlayerSpawnConfiguration_Default).AsSingle();
+        Container.BindConfigurationFromAddressables<DefaultPlayerStatsValuesConfiguration>(Address.Configurations.DefaultPlayerStatsValuesConfiguration_Default).AsSingle();
     }
 }

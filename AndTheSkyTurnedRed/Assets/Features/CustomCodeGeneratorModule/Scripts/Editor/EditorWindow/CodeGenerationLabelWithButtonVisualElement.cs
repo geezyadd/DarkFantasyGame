@@ -1,10 +1,9 @@
-using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
-namespace RSG.Muffin.CustomCodeGeneratorModule.Scripts.Editor.EditorWindow {
+namespace Features.CustomCodeGeneratorModule.Scripts.Editor.EditorWindow {
     public class CodeGenerationLabelWithButtonVisualElement : VisualElement {
         private List<CodeGenerationSubToggleVisualElement> _child;
         private bool _isToogledAll;

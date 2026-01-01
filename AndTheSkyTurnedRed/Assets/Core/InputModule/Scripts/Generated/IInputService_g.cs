@@ -2,7 +2,7 @@
 #nullable enable
 
 using UnityEngine;
-using RSG.Muffin.InputSubmodule.InputModule.Core.Scripts;
+using Core.InputModule.Scripts;
 using UnityEngine.InputSystem;
 namespace Core.InputModule.Scripts.Generated {
     public interface IInputService {

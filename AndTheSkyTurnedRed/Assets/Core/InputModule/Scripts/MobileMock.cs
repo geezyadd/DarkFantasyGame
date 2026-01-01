@@ -2,7 +2,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.InputSystem.Layouts;
 
-namespace Features.Input.Scripts {
+namespace Core.InputModule.Scripts {
     [InputControlLayout(displayName = nameof(MobileMock))]
     public class MobileMock : InputDevice {
         [InputControl(layout = "stick", usage = "LeftStick")]

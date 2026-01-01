@@ -2,6 +2,7 @@ using Features.AnimationModule.Scriipts.PlayerData;
 using Features.CameraModule.Scripts;
 using Features.MovableModule.Scripts.PlayerData;
 using Features.PlayerControlModule.Scripts;
+using Features.PlayerStatsModule.Scripts;
 using Zenject;
 
 namespace Core.Data.Scripts
@@ -14,6 +15,7 @@ namespace Core.Data.Scripts
             Container.Bind<PlayerAnimationControllerModel>().AsSingle();
             Container.Bind<PlayerMovableModel>().AsSingle();
             Container.Bind<PlayerControlDataModel>().AsSingle();
+            Container.Bind<PlayerStatsModel>().AsSingle();
         }
     }
 }

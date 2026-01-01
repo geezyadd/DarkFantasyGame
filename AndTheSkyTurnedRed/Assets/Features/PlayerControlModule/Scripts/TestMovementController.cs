@@ -1,9 +1,7 @@
-using System;
-using System.Collections;
-using Features.AnimationModule.Scriipts;
-using Features.AnimationModule.Scriipts.PlayerData;
 using Features.CameraModule.Scripts;
+using Features.EntityStatsModule.Scripts.Realization;
 using Features.MovableModule.Scripts.PlayerData;
+using Features.PlayerStatsModule.Scripts;
 using UnityEngine;
 using Zenject;
 
@@ -15,13 +13,12 @@ namespace Features.PlayerControlModule.Scripts
         private const float RAYCAST_DISTANCE = 20f;
         [SerializeField] private LayerMask _groundLayerMask;
         [Header("Movement")]
-        [SerializeField] private float _speed = 5f;
+        //[SerializeField] private float _speed = 5f;
         [SerializeField] private float _rotationSpeed = 10f;
         [SerializeField] private float _jumpDuration = 0.5f;
         [SerializeField] private float _jumpMultiplier = 2f;
         [SerializeField] private float _gravityMultiplierDistance = 2;
         [SerializeField] private float _maxGravityMultiplierValue = 15;
-        [SerializeField] private float _distanceToEndJump;
         [SerializeField] private float _velocitySmoothSpeed;
         private Vector3 _inputDirection;
         private float _gravityMultiplier;
@@ -29,13 +26,15 @@ namespace Features.PlayerControlModule.Scripts
         private CameraModel _cameraModel;
         private PlayerMovableModel _playerMovableModel;
         private PlayerControlDataModel _playerControlDataModel;
+        private PlayerStatsModel _playerStatsModel;
 
         [Inject]
-        private void InjectDependencies(CameraModel cameraModel, PlayerMovableModel playerMovableModel, PlayerControlDataModel playerControlDataModel)
+        private void InjectDependencies(CameraModel cameraModel, PlayerMovableModel playerMovableModel, PlayerControlDataModel playerControlDataModel, PlayerStatsModel playerStatsModel)
         {
             _cameraModel = cameraModel;
             _playerMovableModel = playerMovableModel;
             _playerControlDataModel = playerControlDataModel;
+            _playerStatsModel = playerStatsModel;
         }
         
         private void Update() {
@@ -81,11 +80,16 @@ namespace Features.PlayerControlModule.Scripts
             _currentSmoothedDirection = Vector3.Lerp(_currentSmoothedDirection, _inputDirection.normalized, Time.deltaTime * _velocitySmoothSpeed);
             if (_currentSmoothedDirection.magnitude <= 0.01) _currentSmoothedDirection = Vector3.zero;
             
-            _playerMovableModel.PlayerMovable.SetDirection(_inputDirection.normalized == Vector3.zero
-                ? _currentSmoothedDirection
-                : _inputDirection.normalized);
+            Vector3 direction;
 
-            _playerMovableModel.PlayerMovable.SetSpeed(_speed);
+            if (_inputDirection.normalized == Vector3.zero && !_playerControlDataModel.IsAttacking)
+                direction = _currentSmoothedDirection;
+            else
+                direction = _inputDirection.normalized;
+
+            _playerMovableModel.PlayerMovable.SetDirection(direction);
+
+            _playerMovableModel.PlayerMovable.SetSpeed(_playerStatsModel.PlayerStatsEntity.GetStat(EntityStatType.Speed).FullValue);
             _playerMovableModel.PlayerMovable.SetJumpDuration(_jumpDuration);
             _playerMovableModel.PlayerMovable.SetJumpMultiplier(_jumpMultiplier);
             _playerMovableModel.PlayerMovable.SetRotationSpeed(_rotationSpeed);

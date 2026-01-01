@@ -1,8 +1,7 @@
-﻿using Core.InputModule.Scripts;
-using Core.InputModule.Scripts.Generated;
+﻿using Core.InputModule.Scripts.Generated;
 using Zenject;
 
-namespace Features.Input.Scripts.Installers {
+namespace Core.InputModule.Scripts.Installers {
     public class InputRealizationInstaller : Installer<InputRealizationInstaller> {
         public override void InstallBindings() {
             Container.Bind<InputActions>()

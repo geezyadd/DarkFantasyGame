@@ -1,4 +1,3 @@
-using Features.Input.Scripts;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Layouts;

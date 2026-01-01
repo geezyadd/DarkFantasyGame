@@ -1,6 +1,6 @@
 using System;
 
-namespace RSG.Muffin.CustomCodeGeneratorModule.Scripts.Editor.Core {
+namespace Features.CustomCodeGeneratorModule.Scripts.Editor.Core {
     [AttributeUsage(AttributeTargets.Class)]
     public sealed class GeneratorAttribute : Attribute {
         public int GeneratorOrder { get; }

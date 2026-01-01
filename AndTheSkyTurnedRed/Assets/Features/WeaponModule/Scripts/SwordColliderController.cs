@@ -12,7 +12,7 @@ namespace Features.WeaponModule.Scripts
             {
                 if (other.TryGetComponent(out IDamageable damageable))
                 {
-                    damageable.Damage(new DamageData(0, transform.parent));
+                    damageable.Damage(new DamageData(10, transform.parent));
                 }
             }
         }

@@ -1,0 +1,4 @@
+{
+	"name": "TargetSearchModule",
+	"references":[ "GUID:2d259c92d19943b41afb5dd68e7abd1e", "GUID:0d8beb7f090555447a6cf5ce9e54dbb4" ]
+}
