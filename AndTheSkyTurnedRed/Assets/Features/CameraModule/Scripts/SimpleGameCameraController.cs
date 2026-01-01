@@ -27,7 +27,7 @@ namespace Features.CameraModule.Scripts {
             _inputService = inputService;
         }
 
-        private void FixedUpdate()
+        private void LateUpdate()
         {
             Vector2 lookDelta = _inputService.CameraDeltaVector2ReadValue();
             UpdateRotation(lookDelta);

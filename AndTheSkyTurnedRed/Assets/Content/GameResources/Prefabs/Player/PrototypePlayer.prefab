@@ -20,6 +20,7 @@ GameObject:
   - component: {fileID: -854173862410630796}
   - component: {fileID: 1406219832807697122}
   - component: {fileID: 5437094231492655038}
+  - component: {fileID: 3248708610834597483}
   m_Layer: 7
   m_Name: PrototypePlayer
   m_TagString: Untagged
@@ -108,7 +109,7 @@ MonoBehaviour:
   _groundLayerMask:
     serializedVersion: 2
     m_Bits: 64
-  _rotationSpeed: 360
+  _rotationSpeed: 300
   _jumpDuration: 1
   _jumpMultiplier: 4
   _gravityMultiplierDistance: 0.1
@@ -130,7 +131,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   _weapon: {fileID: 7722357893836864313}
-  _attackMovementSpeedDecreaseValue: 0.3
+  _attackMovementSpeedDecreaseValue: 0.5
 --- !u!114 &4802629634945663114
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -143,10 +144,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de8b97f9753d4e7b814970b0a767a8b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _attackMovementSpeedDecreaseValue: 5
   _distanceToEndJump: 0.025
   _animationSmoothSpeed: 10
   _stopRunAnimationVelocityBorder: 7
   _startRunAnimationVelocityBorder: 0
+  _speedDecreaseValue: 0
 --- !u!114 &3706211970845247093
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -261,6 +264,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _statEntityMonoBase: {fileID: 1406219832807697122}
+--- !u!114 &3248708610834597483
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2890644354014384225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 899267ad00f744558bfb7910f5e88cf2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6303072759764360307
 GameObject:
   m_ObjectHideFlags: 0
