@@ -16,7 +16,7 @@ MonoBehaviour:
   - EntityStatType: 1
     Value: 13
   - EntityStatType: 2
-    Value: 360
+    Value: 300
   - EntityStatType: 3
     Value: 1
   - EntityStatType: 4

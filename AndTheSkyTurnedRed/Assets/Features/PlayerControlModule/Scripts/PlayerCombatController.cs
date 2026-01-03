@@ -97,7 +97,7 @@ namespace Features.PlayerControlModule.Scripts
             }
             
 
-            if (!(_speedStat.FullValue < 0.1f) || _combatCount > 1) 
+            if (_speedStat.FullValue < 0.1f || _combatCount > 2) 
                 return;
             
             StatModifier decreaseModifier = new(-_attackMovementSpeedDecreaseValue, ModifierType.Flat);

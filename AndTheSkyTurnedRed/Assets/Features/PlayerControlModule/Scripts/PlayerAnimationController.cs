@@ -1,7 +1,13 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using Features.AnimationModule.Scriipts;
 using Features.AnimationModule.Scriipts.PlayerData;
+using Features.EntityStatsModule.Scripts.Modifier;
+using Features.EntityStatsModule.Scripts.Realization;
+using Features.EntityStatsModule.Scripts.StatsEntity;
 using Features.MovableModule.Scripts.PlayerData;
+using Features.PlayerStatsModule.Scripts;
 using UnityEngine;
 using Zenject;
 
@@ -9,10 +15,12 @@ namespace Features.PlayerControlModule.Scripts
 {
     public class PlayerAnimationController : MonoBehaviour
     {
+        [SerializeField] private float _attackMovementSpeedDecreaseValue;
         [SerializeField] private float _distanceToEndJump;
         [SerializeField] private float _animationSmoothSpeed;
         [SerializeField] private float _stopRunAnimationVelocityBorder;
         [SerializeField] private float _startRunAnimationVelocityBorder;
+        [SerializeField] private float _speedDecreaseValue;
         private PlayerAnimationControllerModel _playerAnimationControllerModel;
         private PlayerMovableModel _playerMovableModel;
         private IAnimationLayersService _animationLayersService;
@@ -24,16 +32,33 @@ namespace Features.PlayerControlModule.Scripts
         private bool _startStopRunTriggered;
         private bool _isStartStopAnimation;
         private PlayerControlDataModel _playerControlDataModel;
+        private PlayerStatsModel _playerStatsModel;
+        private List<StatModifier> _speedDecreaseModifiers = new();
+        private IStat _speedStat;
+        private bool _stopDecreaseSpeedOnTurn;
 
         [Inject]
         private void InjectDependencies(PlayerAnimationControllerModel playerAnimationControllerModel, PlayerMovableModel playerMovableModel,
-            IAnimationLayersService animationLayersService, PlayerControlDataModel playerControlDataModel)
+            IAnimationLayersService animationLayersService, PlayerControlDataModel playerControlDataModel, PlayerStatsModel playerStatsModel)
         {
             _playerAnimationControllerModel = playerAnimationControllerModel;
             _playerMovableModel = playerMovableModel;
             _animationLayersService = animationLayersService;
             _playerControlDataModel = playerControlDataModel;
+            _playerStatsModel = playerStatsModel;
         }
+        
+        private void Start()
+        {
+            _speedStat = _playerStatsModel.PlayerStatsEntity.GetStat(EntityStatType.Speed);
+            _playerAnimationControllerModel.SimplePlayerAttackAnimationFunctionReactor.OnEndTurn += ClearSpeedDecreaseModifiers;
+        }
+
+        private void OnDestroy()
+        {
+            _playerAnimationControllerModel.SimplePlayerAttackAnimationFunctionReactor.OnEndTurn += ClearSpeedDecreaseModifiers;
+        }
+
         private void Update() {
             if (Input.GetKeyDown(KeyCode.Space) && !_playerControlDataModel.IsAttacking) {
                 _playerAnimationControllerModel.PlayerAnimationController.ResetTrigger("Run");
@@ -77,23 +102,54 @@ namespace Features.PlayerControlModule.Scripts
 
                 _playerAnimationControllerModel.PlayerAnimationController.SetFloat("IsGrounded", clampedDistance);
             }
+            
+            //if(!_isTurning || _stopDecreaseSpeedOnTurn)
+            //    return;
+            //
+            //if (_speedStat.FullValue < 0.1f) 
+            //    return;
+            //
+            //StatModifier decreaseModifier = new(-_attackMovementSpeedDecreaseValue, ModifierType.Flat);
+            //_speedDecreaseModifiers.Add(decreaseModifier);
+            //_speedStat.AddStatModifier(decreaseModifier);
+        }
+        
+        private void ClearSpeedDecreaseModifiers()
+        {
+            _stopDecreaseSpeedOnTurn = true;
+            //StartCoroutine(SmoothIncreaseSpeedAfterTurn());
+            for (int i = 0; i < _speedDecreaseModifiers.Count; i++)
+                _speedStat.RemoveStatModifierThatEqual(_speedDecreaseModifiers[i]);
+            _speedDecreaseModifiers.Clear();
+        }
+
+        private IEnumerator SmoothIncreaseSpeedAfterTurn()
+        {
+            for (int i = 0; i < _speedDecreaseModifiers.Count; i++)
+            {
+                _speedStat.RemoveStatModifierThatEqual(_speedDecreaseModifiers[i]);
+                yield return null;
+            }
+            
+            _speedDecreaseModifiers.Clear();
         }
 
         private void HandleTurns()
         {
-            if (Mathf.Abs(_playerMovableModel.PlayerMovable.AngleToTarget) > 170 && !_isTurning) {
-                if(_endTurnsLayerCoroutine != null) _animationLayersService.StopSmooth(_endTurnsLayerCoroutine);
-                _playerAnimationControllerModel.PlayerAnimationController.SetLayerWeight("BattleTurns", 1);
+            if (Mathf.Abs(_playerMovableModel.PlayerMovable.AngleToTarget) > 100 && !_isTurning) {
+                //if(_endTurnsLayerCoroutine != null) _animationLayersService.StopSmooth(_endTurnsLayerCoroutine);
+                //_playerAnimationControllerModel.PlayerAnimationController.SetLayerWeight("BattleTurns", 1);
                 if (_playerMovableModel.PlayerMovable.AngleToTarget > 0)
                     _playerAnimationControllerModel.PlayerAnimationController.SetFloat("AngleToTarget", 1);
                 else
                     _playerAnimationControllerModel.PlayerAnimationController.SetFloat("AngleToTarget", -1);
-
+                //_speedStat.AddStatModifier(_speedDecreaseModifier);
                 _playerAnimationControllerModel.PlayerAnimationController.SetTrigger("Turn");
+                _stopDecreaseSpeedOnTurn = false;
                 StartCoroutine(WaitOneFrameToStartCheckTurnsEnd());
             }
         }
-
+        
         private void HandleStopStartRunEnd()
         {
             if(!_isStartStopAnimation)
@@ -121,7 +177,7 @@ namespace Features.PlayerControlModule.Scripts
 
         private void HandleStopRunAnimation()
         {
-            if(_startStopRunTriggered)
+            if(_startStopRunTriggered || _playerControlDataModel.IsAttacking || _isTurning)
                 return;
 
             if (_lastSmoothedVelocity < _smoothedVelocity) return;
@@ -165,6 +221,10 @@ namespace Features.PlayerControlModule.Scripts
         private IEnumerator WaitOneFrameToStartCheckTurnsEnd()
         {
             yield return null;
+            Debug.LogError("isTurning true");
+            StatModifier decreaseModifier = new(-_attackMovementSpeedDecreaseValue, ModifierType.Flat);
+            _speedDecreaseModifiers.Add(decreaseModifier);
+            _speedStat.AddStatModifier(decreaseModifier);
             _isTurning = true;
         }
 
@@ -173,14 +233,16 @@ namespace Features.PlayerControlModule.Scripts
             if(!_isTurning)
                 return;
             
-            AnimatorStateInfo nextAnimationState = _playerAnimationControllerModel.PlayerAnimationController.GetNextAnimatorStateInfo("BattleTurns");
-            AnimatorStateInfo currentAnimationState = _playerAnimationControllerModel.PlayerAnimationController.GetCurrentAnimatorStateInfo("BattleTurns");
+            AnimatorStateInfo nextAnimationState = _playerAnimationControllerModel.PlayerAnimationController.GetNextAnimatorStateInfo("BattleLocomotion");
+            AnimatorStateInfo currentAnimationState = _playerAnimationControllerModel.PlayerAnimationController.GetCurrentAnimatorStateInfo("BattleLocomotion");
             if ((nextAnimationState.IsTag("Turns") || currentAnimationState.IsTag("Turns")) && !_playerMovableModel.PlayerMovable.IsJumping)
                 return;
-
+            //ClearSpeedDecreaseModifiers();
             _playerAnimationControllerModel.PlayerAnimationController.ResetTrigger("Turn");
-            _endTurnsLayerCoroutine = _animationLayersService.SmoothLayerToZero(_playerAnimationControllerModel.PlayerAnimationController,"BattleTurns",0.2f);
+            //_speedStat.RemoveStatModifierThatEqual(_speedDecreaseModifier);
+            //_endTurnsLayerCoroutine = _animationLayersService.SmoothLayerToZero(_playerAnimationControllerModel.PlayerAnimationController,"BattleTurns",0.5f);
             _isTurning = false;
+            Debug.LogError("isTurning false");
         }
     }
 }
