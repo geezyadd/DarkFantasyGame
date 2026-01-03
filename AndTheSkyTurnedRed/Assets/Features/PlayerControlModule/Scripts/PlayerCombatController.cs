@@ -74,6 +74,7 @@ namespace Features.PlayerControlModule.Scripts
 
         private void Update()
         {
+            return;
             CombatController();
             HandleAttackEnded();
             if (!_attackStarted) 

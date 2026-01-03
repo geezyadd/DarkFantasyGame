@@ -17,12 +17,9 @@ namespace Features.PlayerControlModule.Scripts
         [SerializeField] private float _rotationSpeed = 10f;
         [SerializeField] private float _jumpDuration = 0.5f;
         [SerializeField] private float _jumpMultiplier = 2f;
-        [SerializeField] private float _gravityMultiplierDistance = 2;
-        [SerializeField] private float _maxGravityMultiplierValue = 15;
         [SerializeField] private float _velocitySmoothSpeed;
         private Vector3 _inputDirection;
-        private float _gravityMultiplier;
-        private Vector3 _currentSmoothedDirection;
+        //private Vector3 _currentSmoothedDirection;
         private CameraModel _cameraModel;
         private PlayerMovableModel _playerMovableModel;
         private PlayerControlDataModel _playerControlDataModel;
@@ -51,44 +48,20 @@ namespace Features.PlayerControlModule.Scripts
             camRight.Normalize();
 
             _inputDirection = camForward * vertical + camRight * horizontal;
-            float distanceToGround = GetDistanceToGround();
-            _playerControlDataModel.DistanceToGround = distanceToGround;
-            if (Input.GetKeyDown(KeyCode.Space) && !_playerControlDataModel.IsAttacking) {
+            _playerControlDataModel.DistanceToGround = _playerMovableModel.PlayerMovable.DistanceToGround;
+            _playerControlDataModel.IsNearToGround = _playerMovableModel.PlayerMovable.IsNearToGround;
+            if (Input.GetKeyDown(KeyCode.Space) && !_playerControlDataModel.IsAttacking && _playerMovableModel.PlayerMovable.GroundTouchCount > 0) {
                 _playerMovableModel.PlayerMovable.Jump();
-            }
-
-            ProcessGravityMultiplier(distanceToGround);
-        }
-
-        private void ProcessGravityMultiplier(float distanceToGround)
-        {
-            if (distanceToGround >= _gravityMultiplierDistance)
-            {
-                if(_gravityMultiplier >= _maxGravityMultiplierValue)
-                    _gravityMultiplier--;
-                _playerMovableModel.PlayerMovable.SetGravityMultiplier(_gravityMultiplier);
-            }
-            else
-            {
-                _gravityMultiplier = 0;
-                _playerMovableModel.PlayerMovable.SetGravityMultiplier(_gravityMultiplier);
             }
         }
 
         private void FixedUpdate()
         {
-            _currentSmoothedDirection = Vector3.Lerp(_currentSmoothedDirection, _inputDirection.normalized, Time.deltaTime * _velocitySmoothSpeed);
-            if (_currentSmoothedDirection.magnitude <= 0.01) _currentSmoothedDirection = Vector3.zero;
+            _playerControlDataModel.CurrentSmoothedDirection = Vector3.Lerp(_playerControlDataModel.CurrentSmoothedDirection, _inputDirection.normalized, Time.deltaTime * _velocitySmoothSpeed);
+            //_currentSmoothedDirection = Vector3.Lerp(_currentSmoothedDirection, _inputDirection.normalized, Time.deltaTime * _velocitySmoothSpeed);
+            if (_playerControlDataModel.CurrentSmoothedDirection.magnitude <= 0.01) _playerControlDataModel.CurrentSmoothedDirection = Vector3.zero;
             
-            Vector3 direction;
-
-            if (_inputDirection.normalized == Vector3.zero && !_playerControlDataModel.IsAttacking)
-                direction = _currentSmoothedDirection;
-            else
-                direction = _inputDirection.normalized;
-
-            _playerMovableModel.PlayerMovable.SetDirection(direction);
-
+            _playerMovableModel.PlayerMovable.SetDirection(_playerControlDataModel.CurrentSmoothedDirection);
             _playerMovableModel.PlayerMovable.SetSpeed(_playerStatsModel.PlayerStatsEntity.GetStat(EntityStatType.Speed).FullValue);
             _playerMovableModel.PlayerMovable.SetJumpDuration(_jumpDuration);
             _playerMovableModel.PlayerMovable.SetJumpMultiplier(_jumpMultiplier);
@@ -99,13 +72,13 @@ namespace Features.PlayerControlModule.Scripts
             _playerMovableModel.PlayerMovable.ProcessVerticalMovement();
         }
 
-        private float GetDistanceToGround()
-        {
-            Ray ray = new Ray(transform.position + Vector3.up * RAYCAST_OFFSET, Vector3.down);
-            if (Physics.SphereCast(ray, 0.5f, out RaycastHit hit, RAYCAST_DISTANCE, _groundLayerMask))
-                return Vector3.Distance(hit.point, transform.position);
-
-            return RAYCAST_DISTANCE;
-        }
+        //private float GetDistanceToGround()
+        //{
+        //    Ray ray = new Ray(transform.position + Vector3.up * RAYCAST_OFFSET, Vector3.down);
+        //    if (Physics.SphereCast(ray, 0.5f, out RaycastHit hit, RAYCAST_DISTANCE, _groundLayerMask))
+        //        return Vector3.Distance(hit.point, transform.position);
+//
+        //    return RAYCAST_DISTANCE;
+        //}
     }
 }

@@ -24,7 +24,6 @@ namespace Features.PlayerControlModule.Scripts
         private PlayerAnimationControllerModel _playerAnimationControllerModel;
         private PlayerMovableModel _playerMovableModel;
         private IAnimationLayersService _animationLayersService;
-        private bool _isMoving;
         private float _lastSmoothedVelocity;
         private float _smoothedVelocity;
         private Coroutine _endTurnsLayerCoroutine;
@@ -35,7 +34,6 @@ namespace Features.PlayerControlModule.Scripts
         private PlayerStatsModel _playerStatsModel;
         private List<StatModifier> _speedDecreaseModifiers = new();
         private IStat _speedStat;
-        private bool _stopDecreaseSpeedOnTurn;
 
         [Inject]
         private void InjectDependencies(PlayerAnimationControllerModel playerAnimationControllerModel, PlayerMovableModel playerMovableModel,
@@ -60,20 +58,24 @@ namespace Features.PlayerControlModule.Scripts
         }
 
         private void Update() {
-            if (Input.GetKeyDown(KeyCode.Space) && !_playerControlDataModel.IsAttacking) {
+            if (Input.GetKeyDown(KeyCode.Space) && !_playerControlDataModel.IsAttacking && _playerMovableModel.PlayerMovable.GroundTouchCount > 0 && !_playerMovableModel.PlayerMovable.IsJumping) {
                 _playerAnimationControllerModel.PlayerAnimationController.ResetTrigger("Run");
                 _playerAnimationControllerModel.PlayerAnimationController.SetTrigger("Jump");
             }
 
-            if (_playerControlDataModel.DistanceToGround < _distanceToEndJump && _playerMovableModel.PlayerMovable.IsJumping) {
+            _playerAnimationControllerModel.PlayerAnimationController.SetBool("IsGrounded", _playerControlDataModel.IsNearToGround);
+            if (_playerControlDataModel.DistanceToGround < _distanceToEndJump) {
+                //_playerAnimationControllerModel.PlayerAnimationController.ResetTrigger("Jump");
                 _playerAnimationControllerModel.PlayerAnimationController.SetTrigger("JumpEnded");
             }
+            else
+            {
+                _playerAnimationControllerModel.PlayerAnimationController.ResetTrigger("JumpEnded");
+            }
 
-            _isMoving = _playerMovableModel.PlayerMovable.GetVelocity > 0f;
 
-            if (_isMoving && !_playerMovableModel.PlayerMovable.IsJumping && _playerControlDataModel.DistanceToGround < _distanceToEndJump) {
+            if (_playerMovableModel.PlayerMovable.GroundTouchCount > 0 && _playerControlDataModel.IsNearToGround && !_playerMovableModel.PlayerMovable.IsJumping) {
                 _playerAnimationControllerModel.PlayerAnimationController.SetTrigger("Run");
-                _isMoving = true;
             }
             
             HandleTurns();
@@ -85,23 +87,12 @@ namespace Features.PlayerControlModule.Scripts
                 _smoothedVelocity = 0;
             }
             
-            HandleStopRun();
+            //HandleStopRun();
             //HandleStartRun();
-            HandleStopStartRunEnd();
+            //HandleStopRunEnd();
             
             _playerAnimationControllerModel.PlayerAnimationController.SetFloat("Velocity", _smoothedVelocity);
             _playerAnimationControllerModel.PlayerAnimationController.SetFloat("RunAnimationSpeed", _playerMovableModel.PlayerMovable.GetVelocity/_playerMovableModel.PlayerMovable.GetSpeed);
-            
-            if (!_playerControlDataModel.IsAttacking)
-            {
-                float clampedDistance = Mathf.Clamp01(_playerControlDataModel.DistanceToGround);
-                if (clampedDistance < 0.1)
-                {
-                    clampedDistance = 0;
-                }
-
-                _playerAnimationControllerModel.PlayerAnimationController.SetFloat("IsGrounded", clampedDistance);
-            }
             
             //if(!_isTurning || _stopDecreaseSpeedOnTurn)
             //    return;
@@ -116,7 +107,7 @@ namespace Features.PlayerControlModule.Scripts
         
         private void ClearSpeedDecreaseModifiers()
         {
-            _stopDecreaseSpeedOnTurn = true;
+            _playerControlDataModel.CurrentSmoothedDirection = Vector3.zero;
             //StartCoroutine(SmoothIncreaseSpeedAfterTurn());
             for (int i = 0; i < _speedDecreaseModifiers.Count; i++)
                 _speedStat.RemoveStatModifierThatEqual(_speedDecreaseModifiers[i]);
@@ -145,12 +136,11 @@ namespace Features.PlayerControlModule.Scripts
                     _playerAnimationControllerModel.PlayerAnimationController.SetFloat("AngleToTarget", -1);
                 //_speedStat.AddStatModifier(_speedDecreaseModifier);
                 _playerAnimationControllerModel.PlayerAnimationController.SetTrigger("Turn");
-                _stopDecreaseSpeedOnTurn = false;
                 StartCoroutine(WaitOneFrameToStartCheckTurnsEnd());
             }
         }
         
-        private void HandleStopStartRunEnd()
+        private void HandleStopRunEnd()
         {
             if(!_isStartStopAnimation)
                 return;
@@ -221,10 +211,10 @@ namespace Features.PlayerControlModule.Scripts
         private IEnumerator WaitOneFrameToStartCheckTurnsEnd()
         {
             yield return null;
-            Debug.LogError("isTurning true");
             StatModifier decreaseModifier = new(-_attackMovementSpeedDecreaseValue, ModifierType.Flat);
             _speedDecreaseModifiers.Add(decreaseModifier);
             _speedStat.AddStatModifier(decreaseModifier);
+            //_playerControlDataModel.CurrentSmoothedDirection = Vector3.zero;
             _isTurning = true;
         }
 
@@ -242,7 +232,6 @@ namespace Features.PlayerControlModule.Scripts
             //_speedStat.RemoveStatModifierThatEqual(_speedDecreaseModifier);
             //_endTurnsLayerCoroutine = _animationLayersService.SmoothLayerToZero(_playerAnimationControllerModel.PlayerAnimationController,"BattleTurns",0.5f);
             _isTurning = false;
-            Debug.LogError("isTurning false");
         }
     }
 }

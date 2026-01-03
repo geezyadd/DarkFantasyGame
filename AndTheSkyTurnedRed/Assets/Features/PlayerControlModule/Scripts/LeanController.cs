@@ -1,23 +1,19 @@
-﻿using Features.AnimationModule.Scriipts;
-using Features.AnimationModule.Scriipts.PlayerData;
+﻿using Features.AnimationModule.Scriipts.PlayerData;
 using UnityEngine;
 using Zenject;
 
 namespace Features.PlayerControlModule.Scripts
 {
-    public class LeanController : MonoBehaviour {
+    public class LeanController : MonoBehaviour
+    {
+        [SerializeField] private float _leanSpeed = 5f;
         private PlayerAnimationControllerModel _playerAnimationControllerModel;
-        private IAnimationLayersService _animationLayersService;
-        private PlayerControlDataModel _playerControlDataModel;
         private Vector3 _previousForward;
         private float _leanValue;
 
         [Inject]
-        private void InjectDependencies(PlayerAnimationControllerModel playerAnimationControllerModel,
-            IAnimationLayersService animationLayersService, PlayerControlDataModel playerControlDataModel) {
+        private void InjectDependencies(PlayerAnimationControllerModel playerAnimationControllerModel) {
             _playerAnimationControllerModel = playerAnimationControllerModel;
-            _animationLayersService = animationLayersService;
-            _playerControlDataModel = playerControlDataModel;
         }
 
         private void Update()
@@ -31,7 +27,7 @@ namespace Features.PlayerControlModule.Scripts
         {
             if (!leansActivated)
             {
-                _leanValue = Mathf.Lerp(_leanValue, 0f, 5f * Time.deltaTime); 
+                _leanValue = Mathf.Lerp(_leanValue, 0f, _leanSpeed * Time.deltaTime); 
                 return;
             }
 
@@ -46,7 +42,7 @@ namespace Features.PlayerControlModule.Scripts
             float maxLeanRate = 275f;
             float change = Mathf.Clamp(rotationRate / maxLeanRate, -1f, 1f);
 
-            _leanValue = Mathf.Lerp(_leanValue, change, 5f * Time.deltaTime);
+            _leanValue = Mathf.Lerp(_leanValue, change, _leanSpeed * Time.deltaTime);
         }
     }
 }
