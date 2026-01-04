@@ -34,6 +34,10 @@ namespace Features.PlayerControlModule.Scripts
         private PlayerStatsModel _playerStatsModel;
         private List<StatModifier> _speedDecreaseModifiers = new();
         private IStat _speedStat;
+        private Vector3 _inputDirection;
+        private Vector3 _previousInputDirection;
+        private bool _isPreTurnTriggered;
+        private float _activeInputTime;
 
         [Inject]
         private void InjectDependencies(PlayerAnimationControllerModel playerAnimationControllerModel, PlayerMovableModel playerMovableModel,
@@ -49,12 +53,12 @@ namespace Features.PlayerControlModule.Scripts
         private void Start()
         {
             _speedStat = _playerStatsModel.PlayerStatsEntity.GetStat(EntityStatType.Speed);
-            _playerAnimationControllerModel.SimplePlayerAttackAnimationFunctionReactor.OnEndTurn += ClearSpeedDecreaseModifiers;
+            _playerAnimationControllerModel.SimplePlayerAttackAnimationFunctionReactor.OnEndTurn += SmoothEndTurn;
         }
 
         private void OnDestroy()
         {
-            _playerAnimationControllerModel.SimplePlayerAttackAnimationFunctionReactor.OnEndTurn += ClearSpeedDecreaseModifiers;
+            _playerAnimationControllerModel.SimplePlayerAttackAnimationFunctionReactor.OnEndTurn += SmoothEndTurn;
         }
 
         private void Update() {
@@ -65,7 +69,6 @@ namespace Features.PlayerControlModule.Scripts
 
             _playerAnimationControllerModel.PlayerAnimationController.SetBool("IsGrounded", _playerControlDataModel.IsNearToGround);
             if (_playerControlDataModel.DistanceToGround < _distanceToEndJump) {
-                //_playerAnimationControllerModel.PlayerAnimationController.ResetTrigger("Jump");
                 _playerAnimationControllerModel.PlayerAnimationController.SetTrigger("JumpEnded");
             }
             else
@@ -87,55 +90,36 @@ namespace Features.PlayerControlModule.Scripts
                 _smoothedVelocity = 0;
             }
             
-            //HandleStopRun();
+            HandleStopRun();
             //HandleStartRun();
-            //HandleStopRunEnd();
+            HandleStopRunEnd();
             
             _playerAnimationControllerModel.PlayerAnimationController.SetFloat("Velocity", _smoothedVelocity);
             _playerAnimationControllerModel.PlayerAnimationController.SetFloat("RunAnimationSpeed", _playerMovableModel.PlayerMovable.GetVelocity/_playerMovableModel.PlayerMovable.GetSpeed);
-            
-            //if(!_isTurning || _stopDecreaseSpeedOnTurn)
-            //    return;
-            //
-            //if (_speedStat.FullValue < 0.1f) 
-            //    return;
-            //
-            //StatModifier decreaseModifier = new(-_attackMovementSpeedDecreaseValue, ModifierType.Flat);
-            //_speedDecreaseModifiers.Add(decreaseModifier);
-            //_speedStat.AddStatModifier(decreaseModifier);
         }
-        
-        private void ClearSpeedDecreaseModifiers()
+
+        private void SmoothEndTurn()
         {
             _playerControlDataModel.CurrentSmoothedDirection = Vector3.zero;
-            //StartCoroutine(SmoothIncreaseSpeedAfterTurn());
-            for (int i = 0; i < _speedDecreaseModifiers.Count; i++)
-                _speedStat.RemoveStatModifierThatEqual(_speedDecreaseModifiers[i]);
-            _speedDecreaseModifiers.Clear();
+            ClearSpeedDecreaseModifiers();
         }
-
-        private IEnumerator SmoothIncreaseSpeedAfterTurn()
+        private void ClearSpeedDecreaseModifiers()
         {
             for (int i = 0; i < _speedDecreaseModifiers.Count; i++)
-            {
                 _speedStat.RemoveStatModifierThatEqual(_speedDecreaseModifiers[i]);
-                yield return null;
-            }
-            
             _speedDecreaseModifiers.Clear();
         }
-
+        
         private void HandleTurns()
         {
-            if (Mathf.Abs(_playerMovableModel.PlayerMovable.AngleToTarget) > 100 && !_isTurning) {
-                //if(_endTurnsLayerCoroutine != null) _animationLayersService.StopSmooth(_endTurnsLayerCoroutine);
-                //_playerAnimationControllerModel.PlayerAnimationController.SetLayerWeight("BattleTurns", 1);
+            _playerControlDataModel.IsTurning = _isTurning;
+            if (Mathf.Abs(_playerMovableModel.PlayerMovable.AngleToTarget) > 100 && !_isTurning && _playerControlDataModel.IsNearToGround && !_isPreTurnTriggered) {
                 if (_playerMovableModel.PlayerMovable.AngleToTarget > 0)
                     _playerAnimationControllerModel.PlayerAnimationController.SetFloat("AngleToTarget", 1);
                 else
                     _playerAnimationControllerModel.PlayerAnimationController.SetFloat("AngleToTarget", -1);
-                //_speedStat.AddStatModifier(_speedDecreaseModifier);
                 _playerAnimationControllerModel.PlayerAnimationController.SetTrigger("Turn");
+                _isPreTurnTriggered = true;
                 StartCoroutine(WaitOneFrameToStartCheckTurnsEnd());
             }
         }
@@ -147,12 +131,13 @@ namespace Features.PlayerControlModule.Scripts
             
             AnimatorStateInfo nextAnimationState = _playerAnimationControllerModel.PlayerAnimationController.GetNextAnimatorStateInfo("BattleStartStopRun");
             AnimatorStateInfo currentAnimationState = _playerAnimationControllerModel.PlayerAnimationController.GetCurrentAnimatorStateInfo("BattleStartStopRun");
-            if ((nextAnimationState.IsTag("StartStopRun") || currentAnimationState.IsTag("StartStopRun")) && !_playerMovableModel.PlayerMovable.IsJumping)
+            if ((nextAnimationState.IsTag("StartStopRun") || currentAnimationState.IsTag("StartStopRun")) && !_playerMovableModel.PlayerMovable.IsJumping && !_isTurning)
                 return;
-
+            
+            _animationLayersService.SmoothLayerToZero(_playerAnimationControllerModel.PlayerAnimationController,"BattleStartStopRun",0.3f);
             _playerAnimationControllerModel.PlayerAnimationController.ResetTrigger("StartRun");
             _playerAnimationControllerModel.PlayerAnimationController.ResetTrigger("StopRun");
-            _animationLayersService.SmoothLayerToZero(_playerAnimationControllerModel.PlayerAnimationController,"BattleStartStopRun",0.3f, () => _startStopRunTriggered = false);
+            _startStopRunTriggered = false;
             _isStartStopAnimation = false;
         }
 
@@ -160,23 +145,32 @@ namespace Features.PlayerControlModule.Scripts
         {
             if(_isStartStopAnimation)
                 return;
-            if (!(_smoothedVelocity < _stopRunAnimationVelocityBorder)) return;
+            
+            if(_startStopRunTriggered || _playerControlDataModel.IsAttacking || _isPreTurnTriggered)
+                return;
+            
             HandleStopRunAnimation();
-            StartCoroutine(WaitOneFrameToCheckStartStopEnd());
         }
 
         private void HandleStopRunAnimation()
         {
-            if(_startStopRunTriggered || _playerControlDataModel.IsAttacking || _isTurning)
-                return;
+            if (_inputDirection != Vector3.zero)
+                _activeInputTime += Time.deltaTime;
+            else
+                _activeInputTime = 0;
+            
+            float horizontal = Input.GetAxisRaw("Horizontal");
+            float vertical = Input.GetAxisRaw("Vertical");
+            _inputDirection = new Vector3(horizontal, 0, vertical);
 
-            if (_lastSmoothedVelocity < _smoothedVelocity) return;
-            
-            if (Mathf.Approximately(_lastSmoothedVelocity, _smoothedVelocity)) return;
-            
-            _startStopRunTriggered = true;
-            _playerAnimationControllerModel.PlayerAnimationController.SetLayerWeight("BattleStartStopRun", 1);
-            _playerAnimationControllerModel.PlayerAnimationController.SetTrigger("StopRun");
+            if (_previousInputDirection != Vector3.zero && _inputDirection == Vector3.zero && _activeInputTime > 1)
+            {
+                _startStopRunTriggered = true;
+                _playerAnimationControllerModel.PlayerAnimationController.SetLayerWeight("BattleStartStopRun", 1);
+                _playerAnimationControllerModel.PlayerAnimationController.SetTrigger("StopRun");
+                StartCoroutine(WaitOneFrameToCheckStartStopEnd());
+            }
+            _previousInputDirection = _inputDirection;
         }
         
         private void HandleStartRun()
@@ -195,8 +189,6 @@ namespace Features.PlayerControlModule.Scripts
             
             if (_lastSmoothedVelocity >= _smoothedVelocity) return;
             
-            //if(_endStartStopCoroutine != null) StopCoroutine(_endStartStopCoroutine);
-            
             _startStopRunTriggered = true;
             _playerAnimationControllerModel.PlayerAnimationController.SetLayerWeight("BattleStartStopRun", 1);
             _playerAnimationControllerModel.PlayerAnimationController.SetTrigger("StartRun");
@@ -214,7 +206,6 @@ namespace Features.PlayerControlModule.Scripts
             StatModifier decreaseModifier = new(-_attackMovementSpeedDecreaseValue, ModifierType.Flat);
             _speedDecreaseModifiers.Add(decreaseModifier);
             _speedStat.AddStatModifier(decreaseModifier);
-            //_playerControlDataModel.CurrentSmoothedDirection = Vector3.zero;
             _isTurning = true;
         }
 
@@ -225,13 +216,12 @@ namespace Features.PlayerControlModule.Scripts
             
             AnimatorStateInfo nextAnimationState = _playerAnimationControllerModel.PlayerAnimationController.GetNextAnimatorStateInfo("BattleLocomotion");
             AnimatorStateInfo currentAnimationState = _playerAnimationControllerModel.PlayerAnimationController.GetCurrentAnimatorStateInfo("BattleLocomotion");
-            if ((nextAnimationState.IsTag("Turns") || currentAnimationState.IsTag("Turns")) && !_playerMovableModel.PlayerMovable.IsJumping)
+            if ((nextAnimationState.IsTag("Turns") || currentAnimationState.IsTag("Turns")) && _playerControlDataModel.IsNearToGround)
                 return;
-            //ClearSpeedDecreaseModifiers();
             _playerAnimationControllerModel.PlayerAnimationController.ResetTrigger("Turn");
-            //_speedStat.RemoveStatModifierThatEqual(_speedDecreaseModifier);
-            //_endTurnsLayerCoroutine = _animationLayersService.SmoothLayerToZero(_playerAnimationControllerModel.PlayerAnimationController,"BattleTurns",0.5f);
+            ClearSpeedDecreaseModifiers();
             _isTurning = false;
+            _isPreTurnTriggered = false;
         }
     }
 }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -6,7 +5,7 @@ namespace Features.MovableModule.Scripts
 {
     public class SimpleMovable : MovableBase {
         private const float RAYCAST_OFFSET = 0.5f;
-        private const float RAYCAST_DISTANCE = 20f;
+        private const float RAYCAST_DISTANCE = 50f;
         private const float STOP_LANDING_DISTANCE_THRESHOLD = 0.5f;
         [SerializeField] private Rigidbody _rigidbody;
         [SerializeField] private AnimationCurve _animationCurve;
@@ -109,7 +108,6 @@ namespace Features.MovableModule.Scripts
             //    _gravityMultiplier = 0;
             //    return;
             //}
-            Debug.LogError(_gravityMultiplier);
             if (_distanceToGround > 0.01)
             {
                 if (_gravityMultiplier >= _maxGravityMultiplierValue && !_isJumping)
@@ -218,7 +216,7 @@ namespace Features.MovableModule.Scripts
         
         private IEnumerator JumpCoroutine()
         {
-            transform.forward = _direction.normalized;
+            //transform.forward = _direction.normalized;
             float startY = transform.position.y; 
             float time = 0;
             float jumpDuration = _jumpDuration; 
@@ -248,6 +246,8 @@ namespace Features.MovableModule.Scripts
                 _distanceToGround = Vector3.Distance(hit.point, transform.position);
                 if(_distanceToGround < STOP_LANDING_DISTANCE_THRESHOLD)
                     return true;
+                
+                return false;
             }
 
             _distanceToGround = 100;

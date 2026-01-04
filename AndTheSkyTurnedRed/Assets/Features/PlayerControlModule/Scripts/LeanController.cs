@@ -10,15 +10,17 @@ namespace Features.PlayerControlModule.Scripts
         private PlayerAnimationControllerModel _playerAnimationControllerModel;
         private Vector3 _previousForward;
         private float _leanValue;
+        private PlayerControlDataModel _playerControlDataModel;
 
         [Inject]
-        private void InjectDependencies(PlayerAnimationControllerModel playerAnimationControllerModel) {
+        private void InjectDependencies(PlayerAnimationControllerModel playerAnimationControllerModel, PlayerControlDataModel playerControlDataModel) {
             _playerAnimationControllerModel = playerAnimationControllerModel;
+            _playerControlDataModel = playerControlDataModel;
         }
 
         private void Update()
         {
-            CalculateLean(true);
+            CalculateLean(!_playerControlDataModel.IsTurning);
             _playerAnimationControllerModel.PlayerAnimationController.SetFloat("Lean", _leanValue);
             _previousForward = transform.forward;
         }
@@ -31,14 +33,12 @@ namespace Features.PlayerControlModule.Scripts
                 return;
             }
 
-            // 1. Скорость поворота
-            Vector3 currentForward = transform.forward;
+            Vector3 currentForward = _playerControlDataModel.CurrentSmoothedDirection;
             float rotationRate = _previousForward != currentForward
                 ? Vector3.SignedAngle(currentForward, _previousForward, Vector3.up) / Time.deltaTime * -1f
                 : 0f;
             _previousForward = currentForward;
 
-            // 2. Ограничиваем скорость наклона
             float maxLeanRate = 275f;
             float change = Mathf.Clamp(rotationRate / maxLeanRate, -1f, 1f);
 
